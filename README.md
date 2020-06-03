@@ -1,6 +1,6 @@
-# Generate Changelog Github Action
+# Generate Changelog
 
-### Easily changelog notes for your project with a GitHub Actions
+### Easily generate changelog notes for your project with this GitHub Action
 
 ## Usage
 
