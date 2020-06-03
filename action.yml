@@ -1,0 +1,21 @@
+name: Generate a changelog
+description: Wraps lerna-changelog to generate a changelog between two commits or tags
+author: 'Daniel McKenzie'
+
+inputs:
+  from:
+    description: Old SHA
+  to:
+    description: New SHA
+
+outputs:
+  changelog:
+    description: Changelog formatted as a JSON string
+
+runs:
+  using: node12
+  main: main.js
+
+branding:
+  icon: file-text
+  color: orange

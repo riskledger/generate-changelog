@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "generate-changelog",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riskledger/generate-changelog.git"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "generate",
+    "changelog",
+    "release notes"
+  ],
+  "author": "Daniel McKenzie",
+  "bugs": {
+    "url": "https://github.com/riskledger/generate-changelog/issues"
+  },
+  "homepage": "https://github.com/riskledger/generate-changelog#readme",
+  "scripts": {
+    "lint": "./node_modules/eslint/bin/eslint.js --ext .js",
+    "lint:fix": "yarn run lint --fix",
+    "lint:all": "yarn run lint ./",
+    "lint:all:fix": "yarn run lint:fix ./"
+  },
+  "dependencies": {
+    "@actions/core": "1.2.4",
+    "@actions/github": "2.2.0",
+    "lerna-changelog": "1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "7.1.x",
+    "eslint-config-prettier": "6.11.x",
+    "eslint-plugin-prettier": "3.1.x",
+    "prettier": "2.0.x"
+  }
+}
