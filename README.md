@@ -57,4 +57,3 @@ The code in this project is released under the [MIT](license).
 ## Credits
 
 - Inspired by [Babel's](https://github.com/babel/actions/tree/v2/generate-lerna-changelog) changelog Github Action
-- [Lerna Changelog](https://github.com/lerna/lerna-changelog) which this Github Action wraps
