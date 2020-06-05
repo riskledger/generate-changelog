@@ -22,7 +22,7 @@ Inside your `.github/workflows/workflow.yml` file:
 ```yaml
 steps:
   - uses: actions/checkout@v1
-  - uses: RiskLedger/generate-changelog@v0.1
+  - uses: RiskLedger/generate-changelog@v1.1
     with:
       from: ${ value }} # The old commit sha or tag you'd like to compare with
       to: ${GITHUB_SHA} # The commit SHA that triggered the workflow run
