@@ -12,4 +12,4 @@ const tagTo = core.getInput("to", { required: true });
 
 const changelog = exec(`node ${lernaChangelog} --from ${tagFrom} --to ${tagTo}`);
 
-core.setOutput("changelog", JSON.stringify(changelog));
+core.setOutput("changelog", changelog);
