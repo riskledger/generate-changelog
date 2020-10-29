@@ -15,13 +15,10 @@ const tagTo = core.getInput('to', { required: true });
 const config = load({ nextVersionFromMetadata: false });
 
 const cl = new Changelog(config);
-try {
-  const changelog = cl.createMarkdown({ tagFrom, tagTo });
-} catch (e) {
-  console.log(e);
-}
 
-core.setOutput('changelog', changelog);
+cl.createMarkdown({ tagFrom, tagTo })
+  .then((changelog) => core.setOutput('changelog', changelog))
+  .catch((err) => core.setFailed(`Action failed with error ${err}`));
 
 
 /***/ }),
