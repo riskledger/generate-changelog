@@ -10,11 +10,10 @@ const github = __webpack_require__(5438);
 const { Changelog } = __webpack_require__(6577);
 const { load } = __webpack_require__(1316);
 
-const context = github.context;
-console.log(context);
+const tagFrom = github.context.base.sha;
+const tagTo = github.context.sha;
 
-const tagFrom = core.getInput('from', { required: true });
-const tagTo = core.getInput('to', { required: true });
+console.log(tagFrom, tagTo);
 
 const config = load({ nextVersionFromMetadata: false });
 
