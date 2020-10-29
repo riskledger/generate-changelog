@@ -8,6 +8,10 @@ const tagTo = core.getInput('to', { required: true });
 const config = load({ nextVersionFromMetadata: false });
 
 const cl = new Changelog(config);
-const changelog = cl.createMarkdown({ tagFrom, tagTo });
+try {
+  const changelog = cl.createMarkdown({ tagFrom, tagTo });
+} catch (e) {
+  console.log(e);
+}
 
 core.setOutput('changelog', changelog);
