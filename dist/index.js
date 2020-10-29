@@ -20,7 +20,10 @@ const cl = new Changelog(config);
 
 cl.createMarkdown({ tagFrom, tagTo })
   .then((changelog) => core.setOutput('changelog', changelog))
-  .catch((err) => core.setFailed(`Action failed with error ${err}`));
+  .catch((err) => {
+    console.log(err);
+    core.setFailed(`Action failed with error ${err}`);
+  });
 
 
 /***/ }),
