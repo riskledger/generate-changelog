@@ -1,15 +1,13 @@
-const cp = require("child_process");
-cp.execSync(`cd ${__dirname}; npm ci`);
+// How to install? cache?
+// const cp = require("child_process");
+// cp.execSync(`cd ${__dirname}; npm ci`);
 
-const path = require("path");
-const core = require("@actions/core");
-const lernaChangelog = path.resolve(__dirname, "node_modules/.bin/lerna-changelog");
+const core = require('@actions/core');
+const exec = require('@actions/exec');
 
-const exec = cmd => cp.execSync(cmd).toString().trim();
+const tagFrom = core.getInput('from', { required: true });
+const tagTo = core.getInput('to', { required: true });
 
-const tagFrom = core.getInput("from", { required: true });
-const tagTo = core.getInput("to", { required: true });
+const changelog = await exec.exec(`lerna-changelog --from ${tagFrom} --to ${tagTo}`);
 
-const changelog = exec(`node ${lernaChangelog} --from ${tagFrom} --to ${tagTo}`);
-
-core.setOutput("changelog", changelog);
+core.setOutput('changelog', changelog);
