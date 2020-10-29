@@ -10,6 +10,9 @@ const github = __webpack_require__(5438);
 const { Changelog } = __webpack_require__(6577);
 const { load } = __webpack_require__(1316);
 
+console.log(github.context);
+console.log(github.context.base);
+
 const tagFrom = github.context.base.sha;
 const tagTo = github.context.sha;
 
