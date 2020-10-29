@@ -10,10 +10,14 @@ const github = __webpack_require__(5438);
 const { Changelog } = __webpack_require__(6577);
 const { load } = __webpack_require__(1316);
 
+core.info(github.context);
 console.log('g', github.context);
 
-const tagFrom = github.context.pull_request.base.sha;
-const tagTo = github.context.sha;
+// const tagFrom = github.context.pull_request.base.sha;
+// const tagTo = github.context.sha;
+
+const tagFrom = 'a';
+const tagTo = 'b';
 
 console.log(tagFrom, tagTo);
 
