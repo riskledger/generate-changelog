@@ -7,11 +7,14 @@ module.exports =
 
 const core = __webpack_require__(2186);
 const { Changelog } = __webpack_require__(6577);
+const { load } = __webpack_require__(1316);
 
 const tagFrom = core.getInput('from', { required: true });
 const tagTo = core.getInput('to', { required: true });
 
-const cl = new Changelog();
+const config = load({ nextVersionFromMetadata: false });
+
+const cl = new Changelog(config);
 const changelog = cl.createMarkdown({ tagFrom, tagTo });
 
 core.setOutput('changelog', changelog);
@@ -19050,6 +19053,111 @@ exports.default = ConfigurationError;
 
 /***/ }),
 
+/***/ 1316:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const fs = __webpack_require__(5747);
+const path = __webpack_require__(5622);
+const execa = __webpack_require__(5447);
+const normalize = __webpack_require__(1308);
+const configuration_error_1 = __webpack_require__(9645);
+function load(options = {}) {
+    let cwd = process.cwd();
+    let rootPath = execa.sync("git", ["rev-parse", "--show-toplevel"], { cwd }).stdout;
+    return fromPath(rootPath, options);
+}
+exports.load = load;
+function fromPath(rootPath, options = {}) {
+    let config = fromPackageConfig(rootPath) || fromLernaConfig(rootPath) || {};
+    let { repo, nextVersion, labels, cacheDir, ignoreCommitters } = config;
+    if (!repo) {
+        repo = findRepo(rootPath);
+        if (!repo) {
+            throw new configuration_error_1.default('Could not infer "repo" from the "package.json" file.');
+        }
+    }
+    if (options.nextVersionFromMetadata || config.nextVersionFromMetadata) {
+        nextVersion = findNextVersion(rootPath);
+        if (!nextVersion) {
+            throw new configuration_error_1.default('Could not infer "nextVersion" from the "package.json" file.');
+        }
+    }
+    if (!labels) {
+        labels = {
+            breaking: ":boom: Breaking Change",
+            enhancement: ":rocket: Enhancement",
+            bug: ":bug: Bug Fix",
+            documentation: ":memo: Documentation",
+            internal: ":house: Internal",
+        };
+    }
+    if (!ignoreCommitters) {
+        ignoreCommitters = [
+            "dependabot-bot",
+            "dependabot[bot]",
+            "greenkeeperio-bot",
+            "greenkeeper[bot]",
+            "renovate-bot",
+            "renovate[bot]",
+        ];
+    }
+    return {
+        repo,
+        nextVersion,
+        rootPath,
+        labels,
+        ignoreCommitters,
+        cacheDir,
+    };
+}
+exports.fromPath = fromPath;
+function fromLernaConfig(rootPath) {
+    const lernaPath = path.join(rootPath, "lerna.json");
+    if (fs.existsSync(lernaPath)) {
+        return JSON.parse(fs.readFileSync(lernaPath)).changelog;
+    }
+}
+function fromPackageConfig(rootPath) {
+    const pkgPath = path.join(rootPath, "package.json");
+    if (fs.existsSync(pkgPath)) {
+        return JSON.parse(fs.readFileSync(pkgPath)).changelog;
+    }
+}
+function findRepo(rootPath) {
+    const pkgPath = path.join(rootPath, "package.json");
+    if (!fs.existsSync(pkgPath)) {
+        return;
+    }
+    const pkg = JSON.parse(fs.readFileSync(pkgPath));
+    if (!pkg.repository) {
+        return;
+    }
+    return findRepoFromPkg(pkg);
+}
+function findNextVersion(rootPath) {
+    const pkgPath = path.join(rootPath, "package.json");
+    const lernaPath = path.join(rootPath, "lerna.json");
+    const pkg = fs.existsSync(pkgPath) ? JSON.parse(fs.readFileSync(pkgPath)) : {};
+    const lerna = fs.existsSync(lernaPath) ? JSON.parse(fs.readFileSync(lernaPath)) : {};
+    return pkg.version ? `v${pkg.version}` : lerna.version ? `v${lerna.version}` : undefined;
+}
+function findRepoFromPkg(pkg) {
+    const url = pkg.repository.url || pkg.repository;
+    const normalized = normalize(url).url;
+    const match = normalized.match(/github\.com[:/]([^/]+\/[^/]+?)(?:\.git)?$/);
+    if (!match) {
+        return;
+    }
+    return match[1];
+}
+exports.findRepoFromPkg = findRepoFromPkg;
+
+
+/***/ }),
+
 /***/ 2987:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -25487,6 +25595,53 @@ module.exports = function(fn) {
 	try { return fn() } catch (e) {}
 
 }
+
+/***/ }),
+
+/***/ 1308:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var url = __webpack_require__(8835)
+
+module.exports = function normalize (u) {
+  var parsed = url.parse(u)
+  // If parsing actually alters the URL, it is almost certainly an
+  // scp-style URL, or an invalid one.
+  var altered = u !== url.format(parsed)
+
+  // git is so tricky!
+  // if the path is like ssh://foo:22/some/path then it works, but
+  // it needs the ssh://
+  // If the path is like ssh://foo:some/path then it works, but
+  // only if you remove the ssh://
+  if (parsed.protocol) {
+    parsed.protocol = parsed.protocol.replace(/^git\+/, '')
+  }
+
+  // figure out what we should check out.
+  var checkout = parsed.hash && parsed.hash.substr(1) || 'master'
+  parsed.hash = ''
+
+  var returnedUrl
+  if (altered) {
+    if (u.match(/^git\+https?/) && parsed.pathname.match(/\/?:[^0-9]/)) {
+      returnedUrl = u.replace(/^git\+(.*:[^:]+):(.*)/, '$1/$2')
+    } else if (u.match(/^git\+file/)) {
+      returnedUrl = u.replace(/^git\+/, '')
+    } else {
+      returnedUrl = u.replace(/^(?:git\+)?ssh:\/\//, '')
+    }
+    returnedUrl = returnedUrl.replace(/#[^#]*$/, '')
+  } else {
+    returnedUrl = url.format(parsed)
+  }
+
+  return {
+    url: returnedUrl,
+    branch: checkout
+  }
+}
+
 
 /***/ }),
 
