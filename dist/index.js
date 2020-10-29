@@ -12,6 +12,8 @@ const { load } = __webpack_require__(1316);
 const tagFrom = core.getInput('from', { required: true });
 const tagTo = core.getInput('to', { required: true });
 
+console.log(tagFrom, tagTo);
+
 const config = load({ nextVersionFromMetadata: false });
 
 const cl = new Changelog(config);

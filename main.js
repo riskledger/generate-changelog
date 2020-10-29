@@ -5,6 +5,8 @@ const { load } = require('lerna-changelog/lib/configuration');
 const tagFrom = core.getInput('from', { required: true });
 const tagTo = core.getInput('to', { required: true });
 
+console.log(tagFrom, tagTo);
+
 const config = load({ nextVersionFromMetadata: false });
 
 const cl = new Changelog(config);
