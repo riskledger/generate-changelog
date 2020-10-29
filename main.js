@@ -1,15 +1,14 @@
-const cp = require("child_process");
-cp.execSync(`cd ${__dirname}; npm ci`);
+const core = require('@actions/core');
+const { Changelog } = require('lerna-changelog');
+const { load } = require('lerna-changelog/lib/configuration');
 
-const path = require("path");
-const core = require("@actions/core");
-const lernaChangelog = path.resolve(__dirname, "node_modules/.bin/lerna-changelog");
+const tagFrom = core.getInput('from', { required: true });
+const tagTo = core.getInput('to', { required: true });
 
-const exec = cmd => cp.execSync(cmd).toString().trim();
+const config = load({ nextVersionFromMetadata: false });
 
-const tagFrom = core.getInput("from", { required: true });
-const tagTo = core.getInput("to", { required: true });
+const cl = new Changelog(config);
 
-const changelog = exec(`node ${lernaChangelog} --from ${tagFrom} --to ${tagTo}`);
-
-core.setOutput("changelog", changelog);
+cl.createMarkdown({ tagFrom, tagTo })
+  .then((changelog) => core.setOutput('changelog', changelog))
+  .catch((err) => core.warning(`Failed generating changelog ${err}`));

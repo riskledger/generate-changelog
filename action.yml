@@ -14,7 +14,7 @@ outputs:
 
 runs:
   using: node12
-  main: main.js
+  main: 'dist/index.js'
 
 branding:
   icon: file-text
