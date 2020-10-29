@@ -3,8 +3,7 @@ const github = require('@actions/github');
 const { Changelog } = require('lerna-changelog');
 const { load } = require('lerna-changelog/lib/configuration');
 
-console.log(github.context.pull_request);
-console.log(github.context.pull_request.base);
+console.log('g', github.context);
 
 const tagFrom = github.context.pull_request.base.sha;
 const tagTo = github.context.sha;
