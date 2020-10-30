@@ -28,14 +28,6 @@ steps:
       GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## Arguments
-
-This action currently supports two inputs from the user: `from` and `to`. These inputs, along with their descriptions and usage contexts, are listed in the table below:
-
-|  Input  |                                                 Description                                                 |   Usage    |
-| :-----: | :---------------------------------------------------------------------------------------------------------: | :--------: |
-| `token` | Your Github access token, which will already be avaliable within your workflow without any additional setup | _Required_ |
-
 ## License
 
 The code in this project is released under the [MIT](license).
