@@ -29,7 +29,7 @@
   "dependencies": {
     "@actions/core": "1.6.0",
     "@actions/github": "5.0.0",
-    "lerna-changelog": "1.0.1"
+    "lerna-changelog": "2.1.0"
   },
   "devDependencies": {
     "@vercel/ncc": "0.31.x",
