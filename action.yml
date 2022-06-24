@@ -5,8 +5,22 @@ author: 'Daniel McKenzie'
 inputs:
   from:
     description: Old SHA
+    required: false
   to:
     description: New SHA
+    required: false
+  token:
+    description: token
+    required: true
+  title:
+    description: Pull request title
+    required: true
+  owner:
+    description: Repo owner
+    required: true
+  repo:
+    description: Name of repo
+    required: true
 
 outputs:
   changelog:
