@@ -21,9 +21,6 @@ async function run() {
       return obj.title === title
     })
 
-    console.log(result[0].head.sha)
-    console.log(result[0].base.sha)
-
     // current
     const tagTo = result[0].head.sha;
     const tagFrom = result[0].base.sha;
