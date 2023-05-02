@@ -13,7 +13,7 @@ outputs:
     description: Changelog formatted as a JSON string
 
 runs:
-  using: node12
+  using: node16
   main: 'dist/index.js'
 
 branding:
